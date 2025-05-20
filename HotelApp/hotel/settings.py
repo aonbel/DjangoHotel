@@ -118,15 +118,15 @@ USE_L10N = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = 'app/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '/app/staticfiles')  # Where collectstatic will store files
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Where collectstatic will store files
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '/app/static'),  # Your static files directory
+    os.path.join(BASE_DIR, 'static'),  
 ]
 
 # Media files
-MEDIA_URL = 'app/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '/app/media')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(BASE_DIR, 'media'))
 
 CSRF_TRUSTED_ORIGINS = [
     "https://djangohotel-production.up.railway.app",
