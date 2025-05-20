@@ -28,11 +28,9 @@ def cat_fact(request):
 
 def timer(request):
     logger.info('Timezone: %s', timezone.get_current_timezone())
-    user_time = timezone.localtime(timezone.now())
     utc_time = timezone.now()
     tz = timezone.get_current_timezone()
     data = {
-        'user_time': user_time.strftime('%d-%m-%Y %H:%M:%S'),
         'utc_time': utc_time.strftime('%d-%m-%Y %H:%M:%S'),
         'tz': str(tz)
     }
