@@ -4,117 +4,142 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>{% block title %}{% endblock title %}</title>
 
-    <!-- CDN links for Bootstrap and FontAwesome (required for functionality) -->
+    <!-- CDN links -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    
+    <style>
+        /* Дополнительные стили для мобильных устройств */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                max-height: 60vh;
+                overflow-y: auto;
+            }
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+            .btn-group .btn {
+                margin: 2px 0;
+                width: 100%;
+            }
+            .nav-item {
+                border-bottom: 1px solid rgba(0,0,0,0.1);
+            }
+            .navbar-collapse {
+                padding-bottom: 15px;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <!-- Header Section -->
-    <div>
-        <nav class="navbar navbar-expand-lg">
-            <a class="navbar-brand" href="/">Home</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">Home</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/home">Home</a>
-                    </li>
-                    {% if user.is_staff %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/staff/panel">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/staff/allbookings">All Bookings</a>
-                    </li>
-                    {% elif user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/bookings">My Bookings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/add_feedback">Add feedback</a>
-                    </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/promocode-list">Promocodes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/feedback/list">Feedback</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/news">News</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/vacancies">Vacancies</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contacts">Contacts</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/policy">Policy</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/faq">FAQ</a>
-                    </li>
-                </ul>
-                <div>
-                    {% if user.is_authenticated %}
-                    <div class="btn-group">
-                        <button class="btn" data-toggle="modal" data-target="#forlogin">
-                            Hello, {{ request.user }}
-                        </button>
-                        <a href="/logout" class="nav-link">
-                            <button class="btn">
-                                Logout
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/home">Home</a>
+                        </li>
+                        {% if user.is_staff %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/staff/panel">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/staff/allbookings">All Bookings</a>
+                        </li>
+                        {% elif user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user/bookings">My Bookings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user/add_feedback">Add feedback</a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/promocode-list">Promocodes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/feedback/list">Feedback</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/news">News</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/vacancies">Vacancies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/contacts">Contacts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/policy">Policy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/faq">FAQ</a>
+                        </li>
+                    </ul>
+                    
+                    <div class="my-2 my-lg-0">
+                        {% if user.is_authenticated %}
+                        <div class="btn-group">
+                            <button class="btn btn-outline-light" data-toggle="modal" data-target="#forlogin">
+                                <i class="fas fa-user"></i> {{ request.user|truncatechars:10 }}
                             </button>
-                        </a>
+                            <a href="/logout" class="btn btn-outline-danger">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="btn-group">
+                            <a href="/user" class="btn btn-outline-primary">
+                                <i class="fas fa-user"></i> User Login
+                            </a>
+                            <a href="/staff" class="btn btn-outline-secondary">
+                                <i class="fas fa-user-tie"></i> Staff Login
+                            </a>
+                        </div>
+                        {% endif %}
                     </div>
-                    {% else %}
-                    <a href="/user" class="nav-link">
-                        <button class="btn">
-                            User Login
-                        </button>
-                    </a>
-                    <a href="/staff" class="nav-link">
-                        <button class="btn">
-                            Staff Login
-                        </button>
-                    </a>
-                    {% endif %}
                 </div>
             </div>
         </nav>
-    </div>
-    <!-- Header Section Ends -->
+    </header>
 
     <!-- Messages Section -->
-    <div>
+    <div class="container mt-3">
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
             {{ message }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span>
+                <span aria-hidden="true">&times;</span>
             </button>
         </div>
         {% endfor %}
     </div>
 
     <!-- Main Content -->
-    {% block body %}
-    {% endblock body %}
+    <main class="container my-4">
+        {% block body %}
+        {% endblock body %}
+    </main>
 
     <!-- JavaScript Block -->
     {% block js %}
