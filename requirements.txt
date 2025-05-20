@@ -3,3 +3,4 @@ requests>=2.0
 pytz
 sympy
 django-mathfilters
+django-extensions
