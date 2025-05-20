@@ -4,3 +4,4 @@ pytz
 sympy
 django-mathfilters
 django-extensions
+Pillow
