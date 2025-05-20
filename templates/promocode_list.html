@@ -1,0 +1,42 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block title %}Promocode List{% endblock title %}
+
+{% block body %}
+<!-- Promocode Section -->
+<section>
+    <div>
+        <h2>Promocode List</h2>
+        {% if promocodes %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Discount (%)</th>
+                    <th>Expiration Date</th>
+                    <th>Active</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for promocode in promocodes %}
+                <tr>
+                    <td>{{ promocode.code }}</td>
+                    <td>{{ promocode.discount }}</td>
+                    <td>{{ promocode.expiration_date }}</td>
+                    <td>{{ promocode.active }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No promocodes available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No promocodes available.</p>
+        {% endif %}
+    </div>
+</section>
+<!-- Promocode Section Ends -->
+{% endblock body %}

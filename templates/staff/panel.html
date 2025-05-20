@@ -1,0 +1,329 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% load app_tags %}
+
+{% block title %}Staff Panel{% endblock title %}
+
+{% block body %}
+<!-- Room Stats Section -->
+<section class="my-8">
+    <h2 class="text-center mb-6">Room Stats</h2>
+    <div class="container-fluid px-5 py-5 rounded-lg">
+        <div class="row">
+            <!-- Total Rooms -->
+            <div class="col-xl-3 col-lg-6 col-sm-12 mb-4">
+                <div class="rounded-lg p-5">
+                    <h3 class="text-lg font-semibold text-center mb-4">Total Rooms</h3>
+                    <div class="progress mx-auto" data-value="{{ total_rooms|percentage:total_rooms }}">
+                        <span class="progress-left">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <span class="progress-right">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                            <div class="text-2xl font-bold">{{ total_rooms }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Available Rooms -->
+            <div class="col-xl-3 col-lg-6 col-sm-12 mb-4">
+                <div class="rounded-lg p-5">
+                    <h3 class="text-lg font-semibold text-center mb-4">Available Rooms</h3>
+                    <div class="progress mx-auto" data-value="{{ available|percentage:total_rooms }}">
+                        <span class="progress-left">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <span class="progress-right">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                            <div class="text-2xl font-bold">{{ available }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Not Available Rooms -->
+            <div class="col-xl-3 col-lg-6 col-sm-12 mb-4">
+                <div class="rounded-lg p-5">
+                    <h3 class="text-lg font-semibold text-center mb-4">Not Available</h3>
+                    <div class="progress mx-auto" data-value="{{ unavailable|percentage:total_rooms }}">
+                        <span class="progress-left">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <span class="progress-right">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                            <div class="text-2xl font-bold">{{ unavailable }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Total Reservations -->
+            <div class="col-xl-3 col-lg-6 col-sm-12 mb-4">
+                <div class="rounded-lg p-5">
+                    <h3 class="text-lg font-semibold text-center mb-4">Total Reservations</h3>
+                    <div class="progress mx-auto" data-value="{{ reserved|percentage:total_rooms }}">
+                        <span class="progress-left">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <span class="progress-right">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                            <div class="text-2xl font-bold">{{ reserved }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Rooms Details Section -->
+<section class="container px-5">
+    <h2 class="text-center mb-6">Rooms Details</h2>
+    <!-- Search and Sort Form -->
+    <form method="GET" action="" class="mb-4 flex flex-wrap gap-4">
+        <input type="text" name="search" placeholder="Search bookings" class="form-control w-full sm:w-64">
+        <button type="submit" class="btn">Search</button>
+        <button type="submit" name="sort_by_price" value="1" class="btn">Sort by Price</button>
+    </form>
+    <!-- Action Buttons -->
+    <div class="flex flex-wrap gap-4 mb-6">
+        <button class="btn" data-toggle="modal" data-target="#newroom">Add New Room</button>
+        <button class="btn" data-toggle="modal" data-target="#newlocation">Add New Location</button>
+        <button class="btn" data-toggle="modal" data-target="#newpromo">Add New Promo Code</button>
+        <button class="btn" data-toggle="modal" data-target="#newfaq">Add FAQ</button>
+        <a href="{% url 'add_news' %}" class="btn btn-primary">Add News Article</a>
+        <a href="{% url 'add_vacancy' %}" class="btn btn-primary">Add Vacancy</a>
+        <a href="{% url 'add_contact' %}" class="btn btn-primary">Add Contact</a>
+    </div>
+    <!-- Rooms Table -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Room id</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Price</th>
+                <th>Capacity</th>
+                <th>Size</th>
+                <th colspan="2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if rooms %}
+            {% for each_room in rooms %}
+            <tr>
+                <td>{{ each_room.id }}</td>
+                <td>{{ each_room.get_room_type_display }}</td>
+                <td>{{ each_room.get_status_display }}</td>
+                <td>{{ each_room.price }}</td>
+                <td>{{ each_room.capacity }}</td>
+                <td>{{ each_room.size }}</td>
+                <td colspan="2">
+                    <a href="/staff/panel/edit-room?roomid={{ each_room.id }}"><button class="btn mr-2">Edit</button></a>
+                    <a href="/staff/panel/view-room?roomid={{ each_room.id }}"><button class="btn mr-2">View</button></a>
+                    <a href="/staff/panel/delete-room?roomid={{ each_room.id }}"><button class="btn">Delete</button></a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</section>
+
+<!-- Modal for Delete Room -->
+<div class="modal" id="deleteroom">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete Room</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this room?
+            </div>
+            <div class="modal-footer">
+                <form action="/staff/panel/delete-room" method="GET">
+                    {% csrf_token %}
+                    <input type="hidden" name="roomid" id="roomid">
+                    <button type="submit" class="btn">Delete</button>
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Add New Location -->
+<div class="modal" id="newlocation">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Location</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <form action="/staff/panel/add-new-location" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group mb-4">
+                        <label for="new_owner">Owner:</label>
+                        <input type="text" class="form-control" id="new_owner" name="new_owner" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="new_city">City:</label>
+                        <input type="text" class="form-control" id="new_city" name="new_city" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="new_state">State:</label>
+                        <input type="text" class="form-control" id="new_state" name="new_state" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="new_country">Country:</label>
+                        <input type="text" class="form-control" id="new_country" name="new_country" required>
+                    </div>
+                    <button type="submit" class="btn w-full">Add Location</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Add New FAQ -->
+<div class="modal" id="newfaq">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New FAQ</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <form action="/staff/panel/add-new-faq" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group mb-4">
+                        <label for="new_question">Question:</label>
+                        <input type="text" class="form-control" id="new_question" name="new_question" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="new_answer">Answer:</label>
+                        <input type="text" class="form-control" id="new_answer" name="new_answer" required>
+                    </div>
+                    <button type="submit" class="btn w-full">Add FAQ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Add New Promo Code -->
+<div class="modal" id="newpromo">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Promo Code</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <form action="/staff/panel/add-new-promo" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group mb-4">
+                        <label for="new_promo_code">Promo Code:</label>
+                        <input type="text" class="form-control" id="new_promo_code" name="new_promo_code" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="new_discount">Discount:</label>
+                        <input type="text" class="form-control" id="new_discount" name="new_discount" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="new_expiry_date">Expiry Date:</label>
+                        <input type="date" class="form-control" id="new_expiry_date" name="new_expiry_date" required>
+                    </div>
+                    <button type="submit" class="btn w-full">Add Promo Code</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Add New Room -->
+<div class="modal" id="newroom">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Room</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <form action="/staff/panel/add-new-room" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group mb-4">
+                        <label for="roomtype">Room Type:</label>
+                        <select class="form-control" name="roomtype" id="roomtype" required>
+                            <option value="1">Premium</option>
+                            <option value="2">Deluxe</option>
+                            <option value="3">Basic</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="capacity">Capacity:</label>
+                        <input type="number" class="form-control" id="capacity" name="capacity" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="price">Price:</label>
+                        <input type="number" class="form-control" id="price" name="price" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="size">Size:</label>
+                        <input type="number" class="form-control" id="size" name="size" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="roomstatus">Status:</label>
+                        <select class="form-control" name="status" id="roomstatus" required>
+                            <option value="1">Available</option>
+                            <option value="2">Not Available</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="hotel">Location:</label>
+                        <select class="form-control" name="hotel" id="hotel" required>
+                            {% for each_location, eachid in location %}
+                            <option value="{{ eachid }}">{{ each_location }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn w-full">Add Room</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block js %}
+<script>
+$(function() {
+    $(".progress").each(function() {
+        var value = $(this).attr('data-value');
+        var left = $(this).find('.progress-left .progress-bar');
+        var right = $(this).find('.progress-right .progress-bar');
+
+        if (value > 0) {
+            if (value <= 50) {
+                right.css('transform', 'rotate(' + percentageToDegrees(value) + 'deg)')
+            } else {
+                right.css('transform', 'rotate(180deg)')
+                left.css('transform', 'rotate(' + percentageToDegrees(value - 50) + 'deg)')
+            }
+        }
+    });
+
+    function percentageToDegrees(percentage) {
+        return percentage / 100 * 360;
+    }
+});
+</script>
+{% endblock js %}

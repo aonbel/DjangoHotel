@@ -1,0 +1,70 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block title %}All Bookings{% endblock title %}
+
+{% block body %}
+<div>
+    <!-- Bookings Table -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Room</th>
+                <th>Location</th>
+                <th>Person</th>
+                <th>Check In</th>
+                <th>Check Out</th>
+                <th>Price</th>
+                <th>Child</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for each_booking in bookings %}
+            <tr>
+                <td>{{ each_booking.guest.username }}</td>
+                <td>{{ each_booking.room.roomnumber }}</td>
+                <td>{{ each_booking.room.hotel.location }}</td>
+                <td>{{ each_booking.room.capacity }}</td>
+                <td>{{ each_booking.check_in }}</td>
+                <td>{{ each_booking.check_out }}</td>
+                <td>{{ each_booking.room.price }}</td>
+                <td>{{ each_booking.has_child }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Revenue Chart -->
+    <div>
+        <canvas id="revenueChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    const labels = {{ locations|safe }};
+    const data = {{ revenues|safe }};
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Revenue',
+                data: data
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>
+{% endblock body %}

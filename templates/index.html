@@ -1,0 +1,80 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% load app_tags %}
+
+{% block title %}Hotel{% endblock title %}
+
+{% block body %}
+<!-- Booking Section -->
+<section>
+    <div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-lg-4">
+                    <label for="roomstatus">Location</label>
+                    <select name="search_location" id="roomstatus">
+                        <option>Location</option>
+                        {% for each_location, each_hotel_id in all_location %}
+                        <option value="{{ each_hotel_id }}">{{ each_location }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <label for="cin">Check In</label>
+                    <input type="date" name="cin" min="{% todays_date %}" max="{% max_date %}" aria-label="Check In" required>
+                </div>
+                <div class="col-lg-2">
+                    <label for="cout">Check Out</label>
+                    <input type="date" name="cout" min="{% tommorow %}" max="{% max_date %}" aria-label="Check Out" required>
+                </div>
+                <div class="col-lg-2">
+                    <label for="capacity">Person</label>
+                    <input type="number" name="capacity" placeholder="Person" aria-label="Person" required>
+                </div>
+                <div class="col-lg-2">
+                    <input type="submit" value="Check Availability">
+                </div>
+                {% if rooms %}
+                <p>Rooms Available</p>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</section>
+<!-- Booking Section Ends -->
+
+<!-- Fetched Results -->
+<div>
+    {% if rooms %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Person</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in rooms %}
+            <tr>
+                <td>{{ r.get_room_type_display }}</td>
+                <td>{{ r.hotel.location }}</td>
+                <td>{{ r.capacity }}</td>
+                <td>{{ r.price }}</td>
+                <td><a href="/user/book-room?roomid={{ r.id }}"><button>Book Now</button></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+<!-- Fetched Results Ends -->
+
+<h2>Календарь на этот месяц</h2>
+<pre style="font-family: monospace; line-height:1.2;">
+{{ month_calendar }}
+
+{% endblock body %}

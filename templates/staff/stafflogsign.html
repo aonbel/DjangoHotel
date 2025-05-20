@@ -1,0 +1,66 @@
+{% extends 'basic.html' %}
+{% block title %}Staff{% endblock title %}
+{% block body %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#home">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#menu1">Signup</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="card-body">
+            <div class="tab-content">
+                <!-- Login Form -->
+                <div id="home" class="tab-pane active">
+                    <form action="/staff/login" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="staffUsername">Username</label>
+                            <input type="text" class="form-control" id="staffUsername" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="staffPassword">Password</label>
+                            <input type="password" class="form-control" id="staffPassword" name="password" required>
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="staffRemember">
+                            <label class="form-check-label" for="staffRemember">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    </form>
+                </div>
+
+                <!-- Signup Form -->
+                <div id="menu1" class="tab-pane fade">
+                    <form action="/staff/signup" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="staffSignupUser">Username</label>
+                            <input type="text" class="form-control" id="staffSignupUser" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="staffPassword1">Password</label>
+                            <input type="password" class="form-control" id="staffPassword1" name="password1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="staffPassword2">Confirm Password</label>
+                            <input type="password" class="form-control" id="staffPassword2" name="password2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="staffDob">Date of Birth</label>
+                            <input type="date" class="form-control" id="staffDob" name="agecheck" required>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,64 @@
+{% extends 'basic.html' %}
+{% block title %}Edit Room{% endblock title %}
+{% block body %}
+<h1 class="text-center bg-warning my-0">Edit Room</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-lg-6 col-xlg-6 col-sm-12 mx-auto">
+            <form action="/staff/panel/edit-room" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="roomtype">Room Type:</label>
+                    <select class="form-control" name="roomtype" id="roomtype">
+                        <option value="1">Premium</option>
+                        <option value="2">Deluxe</option>
+                        <option value="3">Basic</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="capacity">Capacity:</label>
+                    <input type="number" class="form-control" id="capacity" name="capacity" value="{{room.capacity}}">
+                </div>
+                <div class="form-group">
+                    <label for="price">Price:</label>
+                    <input type="number" class="form-control" id="price" name="price" value="{{room.price}}">
+                </div>
+                <div class="form-group">
+                    <label for="size">Size:</label>
+                    <input type="number" class="form-control" id="size" name="size" value="{{room.size}}">
+                </div>
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <select class="form-control" name="status" id="status">
+                        <option value="1">Available</option>
+                        <option value="2">Not Available</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="hotel">Location:</label>
+                    <input type="text" class="form-control" id="hotel" name="hotel" value="{{room.hotel.location}}" disabled>
+                </div>
+                <button type="submit" class="btn btn-danger">Save</button>
+                <input type="hidden" name="roomid" value="{{room.id}}">
+                <input type="hidden" name="roomtypevalue" id="roomtypevalue" value="{{room.room_type}}">
+                <input type="hidden" name="roomstatus" id="roomstatus" value="{{room.status}}">
+                <input type="hidden" class="form-control" id="hotel" name="hotel" value="{{room.hotel.id}}">
+                <input type="hidden" class="form-control" id="roomnumber" name="roomnumber" value="{{room.roomnumber}}">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+{% block js %}
+<script>
+$(document).ready(function() {
+    // for room type
+    var x = $("#roomtypevalue").val();
+    $("#roomtype").val(Number(x)).attr("selected", "selected");
+
+    // for room status
+    var x = $("#roomstatus").val();
+    $("#status").val(Number(x)).attr("selected", "selected");
+});
+</script>
+{% endblock js %}

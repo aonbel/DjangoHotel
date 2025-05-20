@@ -1,0 +1,36 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block title %}{{ news_article.title }}{% endblock title %}
+
+{% block body %}
+<!-- News Detail Section -->
+<section>
+    <div class="container">
+        <h2 class="text-center text-success">{{ news_article.title }}</h2>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <div class="row">
+            <div class="col-md-12">
+                {% if news_article.image %}
+                    <img src="{{ news_article.image.url }}" alt="{{ news_article.title }}" class="img-fluid mb-3" style="max-width: 100%; height: auto;">
+                {% else %}
+                    <p class="text-muted">No image available</p>
+                {% endif %}
+                <p><strong>Summary:</strong> {{ news_article.summary }}</p>
+                <p><strong>Published:</strong> {{ news_article.published_at|date:"Y-m-d H:i" }}</p>
+                <p><strong>Content:</strong></p>
+                <div>{{ news_article.content|linebreaks }}</div>
+                <a href="{% url 'news_list' %}" class="btn btn-primary mt-3">Back to News List</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- News Detail Section Ends -->
+{% endblock body %}
